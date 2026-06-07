@@ -246,9 +246,70 @@
     #messages { height:300px; }
     .chips-grid { grid-template-columns:1fr 1fr; }
   }
+
+  /* ── KEY MODAL ── */
+  #keyModal {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(0,0,0,.85);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  #keyModal.hidden { display: none; }
+  .key-card {
+    background: #111; border: 1px solid rgba(204,255,0,.25);
+    border-radius: 16px; padding: 36px 32px; max-width: 460px; width: 100%;
+    box-shadow: 0 0 60px rgba(204,255,0,.08);
+  }
+  .key-card h2 {
+    font-family: var(--font-display); font-size: 36px;
+    letter-spacing: 3px; color: var(--text); margin-bottom: 8px;
+  }
+  .key-card p {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--muted); letter-spacing: .08em; margin-bottom: 24px; line-height: 1.7;
+  }
+  .key-card a { color: var(--accent); text-decoration: none; }
+  .key-input {
+    width: 100%; background: #0E0E0E; border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-family: var(--font-mono); font-size: 12px;
+    padding: 13px 16px; outline: none; margin-bottom: 12px;
+    transition: border-color .2s, box-shadow .2s;
+    letter-spacing: .04em;
+  }
+  .key-input:focus {
+    border-color: rgba(204,255,0,.45);
+    box-shadow: 0 0 0 3px rgba(204,255,0,.07);
+  }
+  .key-submit {
+    width: 100%; background: var(--accent); border: none;
+    border-radius: 8px; color: #0A0A0A;
+    font-family: var(--font-mono); font-size: 12px;
+    font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    padding: 14px; cursor: pointer; transition: all .2s;
+  }
+  .key-submit:hover { background: #d9ff1a; box-shadow: 0 0 20px rgba(204,255,0,.3); }
+  .key-error {
+    font-family: var(--font-mono); font-size: 11px;
+    color: #FF6B6B; margin-top: 8px; display: none;
+  }
 </style>
 </head>
 <body>
+
+
+<div id="keyModal">
+  <div class="key-card">
+    <h2>AUVIX<span style="color:var(--accent)">.</span>AI</h2>
+    <p>Для работы нужен бесплатный API-ключ OpenRouter.<br>
+    Получите на <a href="https://openrouter.ai/settings/keys" target="_blank">openrouter.ai/settings/keys</a> → New Key.<br>
+    Ключ сохранится только в вашем браузере.</p>
+    <input class="key-input" id="keyInput" type="password" placeholder="sk-or-v1-...">
+    <button class="key-submit" onclick="saveKey()">ПОДКЛЮЧИТЬ</button>
+    <div class="key-error" id="keyError">Введите корректный ключ (начинается с sk-or-v1-)</div>
+  </div>
+</div>
 
 <main>
   <section class="hero">
@@ -307,7 +368,7 @@
 //  ВСТАВЬТЕ НОВЫЙ КЛЮЧ OPENROUTER СЮДА:
 //  Получить: https://openrouter.ai/settings/keys
 // ════════════════════════════════════════════
-const OR_KEY = "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";
+const OR_KEY = localStorage.getItem('or_key') || '';
 // ════════════════════════════════════════════
 
 // Провайдеры в порядке приоритета
@@ -425,7 +486,7 @@ async function callOne(provider, messages, signal) {
     signal,
     headers: {
       "Content-Type":  "application/json",
-      "Authorization": "Bearer " + OR_KEY,
+      "Authorization": "Bearer " + (localStorage.getItem('or_key') || ''),
       "HTTP-Referer":  "https://auvixda.github.io/Ai/",
       "X-Title":       "Auvix AI",
     },
@@ -477,13 +538,30 @@ async function askAI(messages) {
   throw new Error("Все провайдеры недоступны. Обновите API-ключ на openrouter.ai");
 }
 
+
+function saveKey() {
+  const val = document.getElementById('keyInput').value.trim();
+  if (!val.startsWith('sk-or-v1-')) {
+    document.getElementById('keyError').style.display = 'block';
+    return;
+  }
+  localStorage.setItem('or_key', val);
+  document.getElementById('keyModal').classList.add('hidden');
+}
+
+// Show modal if no key saved
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('or_key');
+  if (!saved) {
+    document.getElementById('keyModal').classList.remove('hidden');
+  } else {
+    document.getElementById('keyModal').classList.add('hidden');
+  }
+});
+
 async function sendMessage() {
   const text = inputEl.value.trim();
   if (!text || busy) return;
-  if (OR_KEY === "ВСТАВЬТЕ_КЛЮЧ_СЮДА") {
-    showToast("⚠ Сначала вставьте API-ключ OpenRouter в код (переменная OR_KEY)");
-    return;
-  }
 
   busy = true;
   sendBtn.disabled  = true;
