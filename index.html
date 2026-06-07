@@ -71,14 +71,14 @@
 
   /* ── HEADER ── */
   header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
+    position: sticky;
+    top: 0;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px 40px;
-    background: rgba(10,10,10,.8);
+    background: rgba(10,10,10,.92);
     backdrop-filter: blur(18px);
     border-bottom: 1px solid var(--border);
   }
@@ -139,7 +139,7 @@
   main {
     position: relative;
     z-index: 1;
-    padding-top: 100px;
+    padding-top: 20px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -572,14 +572,38 @@ const PROXYAPI_KEY   = ""; // proxyapi.ru ключ (российский про�
 // ──────────────────────────────────────────────────────────────
 const PROVIDERS = [
   {
-    id: "openrouter-free",
-    label: "OpenRouter",
+    id: "openrouter-llama",
+    label: "Llama 3.1 8B",
+    type: "openai",
+    baseUrl: "https://openrouter.ai/api/v1",
+    model: "meta-llama/llama-3.1-8b-instruct:free",
+    apiKey: OPENROUTER_KEY,
+    headers: {
+      "HTTP-Referer": "https://auvix.ai",
+      "X-Title": "Auvix AI"
+    }
+  },
+  {
+    id: "openrouter-gemma",
+    label: "Gemma 2 9B",
+    type: "openai",
+    baseUrl: "https://openrouter.ai/api/v1",
+    model: "google/gemma-2-9b-it:free",
+    apiKey: OPENROUTER_KEY,
+    headers: {
+      "HTTP-Referer": "https://auvix.ai",
+      "X-Title": "Auvix AI"
+    }
+  },
+  {
+    id: "openrouter-mistral",
+    label: "Mistral 7B",
     type: "openai",
     baseUrl: "https://openrouter.ai/api/v1",
     model: "mistralai/mistral-7b-instruct:free",
     apiKey: OPENROUTER_KEY,
     headers: {
-      "HTTP-Referer": window.location.href,
+      "HTTP-Referer": "https://auvix.ai",
       "X-Title": "Auvix AI"
     }
   },
