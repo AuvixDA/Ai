@@ -24,23 +24,19 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
 
-  /* overflow: hidden на body убран — он ломает position:sticky */
   body {
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-body);
     min-height: 100vh;
-    overflow-x: clip; /* clip вместо hidden — не ломает sticky */
+    overflow-x: clip;
     position: relative;
   }
 
-  /* Grid фон */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
     background-image:
       linear-gradient(rgba(204,255,0,.028) 1px, transparent 1px),
       linear-gradient(90deg, rgba(204,255,0,.028) 1px, transparent 1px);
@@ -48,82 +44,23 @@
     mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 40%, transparent 100%);
   }
 
-  /* Glow orb */
   body::after {
     content: '';
-    position: fixed;
-    top: -200px;
-    left: 50%;
+    position: fixed; top: -200px; left: 50%;
     transform: translateX(-50%);
-    width: 700px;
-    height: 500px;
+    width: 700px; height: 500px;
     background: radial-gradient(ellipse, rgba(204,255,0,.07) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+    pointer-events: none; z-index: 0;
   }
 
-  /* ── HEADER — sticky (остаётся вверху при скролле) ── */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 40px;
-    background: rgba(10,10,10,.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
 
-  .logo {
-    font-family: var(--font-display);
-    font-size: 26px;
-    letter-spacing: 4px;
-    color: var(--text);
-    user-select: none;
-  }
-  .logo span { color: var(--accent); }
 
-  .header-right { display: flex; align-items: center; gap: 16px; }
-
-  .status-dot {
-    display: flex; align-items: center; gap: 7px;
-    font-family: var(--font-mono);
-    font-size: 11px; color: var(--muted); letter-spacing: .05em;
-  }
-  .status-dot::before {
-    content: '';
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--accent); box-shadow: 0 0 8px var(--accent);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity:1; transform:scale(1); }
-    50%      { opacity:.5; transform:scale(.85); }
-  }
-
-  .btn-outline {
-    font-family: var(--font-mono); font-size: 12px;
-    letter-spacing: .1em; text-transform: uppercase;
-    color: var(--accent); border: 1px solid rgba(204,255,0,.3);
-    background: transparent; padding: 9px 20px; border-radius: 6px;
-    cursor: pointer; transition: all .2s;
-  }
-  .btn-outline:hover {
-    background: rgba(204,255,0,.06); border-color: var(--accent);
-    box-shadow: 0 0 16px rgba(204,255,0,.15);
-  }
-
-  /* ── MAIN ── */
   main {
     position: relative; z-index: 1;
-    padding-top: 24px; min-height: calc(100vh - 65px);
+    padding-top: 24px;
     display: flex; flex-direction: column; align-items: center;
   }
 
-  /* ── HERO ── */
   .hero {
     text-align: center; padding: 32px 24px 16px;
     max-width: 900px; width: 100%;
@@ -136,8 +73,8 @@
   .hero-title {
     font-family: var(--font-display);
     font-size: clamp(72px, 13vw, 148px);
-    line-height: .92; letter-spacing: 6px;
-    color: var(--text); text-transform: uppercase;
+    line-height: .92; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--text);
   }
   .hero-title .accent { color: var(--accent); }
   .hero-sub {
@@ -145,7 +82,6 @@
     margin-top: 16px; letter-spacing: .02em; font-weight: 300;
   }
 
-  /* ── CHAT ── */
   .chat-wrapper {
     width: 100%; max-width: 800px;
     padding: 0 20px 32px; margin-top: 28px;
@@ -174,7 +110,7 @@
   }
 
   #messages {
-    height: 380px; overflow-y: auto;
+    height: 400px; overflow-y: auto;
     padding: 24px 24px 8px;
     display: flex; flex-direction: column; gap: 20px;
     scroll-behavior: smooth;
@@ -183,7 +119,10 @@
   #messages::-webkit-scrollbar-track { background: transparent; }
   #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  .msg { display:flex; flex-direction:column; max-width:85%; animation: fadeUp .3s ease both; }
+  .msg {
+    display: flex; flex-direction: column; max-width: 85%;
+    animation: fadeUp .3s ease both;
+  }
   @keyframes fadeUp {
     from { opacity:0; transform:translateY(8px); }
     to   { opacity:1; transform:translateY(0); }
@@ -200,7 +139,7 @@
 
   .msg-bubble {
     padding: 13px 18px; border-radius: 10px;
-    font-size: 14px; line-height: 1.65;
+    font-size: 14px; line-height: 1.7;
   }
   .msg.user .msg-bubble {
     background: #161616; border: 1px solid var(--border); color: var(--text);
@@ -218,9 +157,9 @@
   .empty-state {
     flex:1; display:flex; flex-direction:column;
     align-items:center; justify-content:center;
-    gap:10px; opacity:.35; padding:40px 0; text-align:center;
+    gap:10px; opacity:.3; padding:40px 0; text-align:center;
   }
-  .empty-state svg { width:40px; height:40px; opacity:.5; }
+  .empty-state svg { width:40px; height:40px; }
   .empty-state p {
     font-family: var(--font-mono); font-size:12px;
     letter-spacing:.1em; color:var(--muted); text-transform:uppercase;
@@ -256,7 +195,7 @@
     background:#d9ff1a; box-shadow:0 0 20px rgba(204,255,0,.4); transform:scale(1.05);
   }
   .send-btn:active { transform:scale(.96); }
-  .send-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+  .send-btn:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
   .send-btn svg { width:18px; height:18px; fill:#0A0A0A; }
 
   .input-meta {
@@ -265,7 +204,6 @@
     font-size:10px; color:var(--muted); letter-spacing:.08em;
   }
 
-  /* ── CHIPS ── */
   .chips-section { width:100%; max-width:800px; padding:0 20px 60px; }
   .chips-label {
     font-family:var(--font-mono); font-size:10px;
@@ -288,16 +226,15 @@
   }
   .chip-icon { font-size:20px; margin-bottom:8px; display:block; }
   .chip-title { font-size:13px; font-weight:500; color:var(--text); margin-bottom:3px; }
-  .chip-sub { font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:.04em; }
+  .chip-sub { font-family:var(--font-mono); font-size:10px; color:var(--muted); }
 
-  /* ── TOAST ── */
   #toast {
     position:fixed; bottom:28px; right:28px;
     background:#1A0000; border:1px solid #440000; color:#FF6B6B;
     font-family:var(--font-mono); font-size:12px;
-    padding:12px 18px; border-radius:8px; max-width:340px;
+    padding:12px 18px; border-radius:8px; max-width:360px;
     z-index:999; opacity:0; transform:translateY(10px);
-    transition:all .25s; pointer-events:none;
+    transition:all .25s; pointer-events:none; line-height:1.5;
   }
   #toast.show { opacity:1; transform:translateY(0); }
 
@@ -306,20 +243,12 @@
     .hero { padding:20px 16px 12px; }
     .hero-title { font-size:68px; letter-spacing:2px; }
     .chat-wrapper, .chips-section { padding-left:12px; padding-right:12px; }
-    #messages { height:280px; }
+    #messages { height:300px; }
     .chips-grid { grid-template-columns:1fr 1fr; }
   }
 </style>
 </head>
 <body>
-
-<header>
-  <div class="logo">AUVIX<span>.</span>AI</div>
-  <div class="header-right">
-    <div class="status-dot">ONLINE</div>
-    <button class="btn-outline" onclick="document.getElementById('userInput').focus()">ЗАПУСТИТЬ</button>
-  </div>
-</header>
 
 <main>
   <section class="hero">
@@ -335,7 +264,7 @@
           <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
           AUVIX CORE
         </div>
-        <span class="model-badge" id="modelBadge">—</span>
+        <span class="model-badge" id="modelBadge">AUTO</span>
       </div>
 
       <div id="messages">
@@ -357,7 +286,7 @@
         </div>
         <div class="input-meta">
           <span id="statusText">Готов к работе</span>
-          <span>Enter — отправить &nbsp;·&nbsp; Shift+Enter — строка</span>
+          <span>Enter — отправить · Shift+Enter — строка</span>
         </div>
       </div>
     </div>
@@ -374,75 +303,49 @@
 <script>
 "use strict";
 
-// ═══════════════════════════════════════════════
-//  API КЛЮЧИ — вставьте свои значения сюда
-// ═══════════════════════════════════════════════
-const OPENROUTER_KEY = "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";
-const HF_TOKEN       = ""; // необязательно
-// ═══════════════════════════════════════════════
+// ════════════════════════════════════════════
+//  ВСТАВЬТЕ НОВЫЙ КЛЮЧ OPENROUTER СЮДА:
+//  Получить: https://openrouter.ai/settings/keys
+// ════════════════════════════════════════════
+const OR_KEY = "ВСТАВЬТЕ_КЛЮЧ_СЮДА";
+// ════════════════════════════════════════════
 
-// Провайдеры — перебираются по порядку при ошибках
+// Провайдеры в порядке приоритета
 const PROVIDERS = [
-  {
-    id: "or-llama",
-    label: "Llama 3.1 8B",
-    baseUrl: "https://openrouter.ai/api/v1",
-    model: "meta-llama/llama-3.1-8b-instruct:free",
-    apiKey: OPENROUTER_KEY,
-  },
-  {
-    id: "or-gemma",
-    label: "Gemma 2 9B",
-    baseUrl: "https://openrouter.ai/api/v1",
-    model: "google/gemma-2-9b-it:free",
-    apiKey: OPENROUTER_KEY,
-  },
-  {
-    id: "or-mistral",
-    label: "Mistral 7B",
-    baseUrl: "https://openrouter.ai/api/v1",
-    model: "mistralai/mistral-7b-instruct:free",
-    apiKey: OPENROUTER_KEY,
-  },
-  {
-    id: "or-qwen",
-    label: "Qwen 2.5 7B",
-    baseUrl: "https://openrouter.ai/api/v1",
-    model: "qwen/qwen-2.5-7b-instruct:free",
-    apiKey: OPENROUTER_KEY,
-  },
+  // openrouter/free — автоматически выбирает лучшую свободную модель
+  { id:"or-auto",    label:"AUTO",       model:"openrouter/free" },
+  // Конкретные модели как резерв
+  { id:"or-llama",   label:"LLAMA 3.1",  model:"meta-llama/llama-3.1-8b-instruct:free" },
+  { id:"or-gemma",   label:"GEMMA 2",    model:"google/gemma-2-9b-it:free" },
+  { id:"or-qwen",    label:"QWEN 2.5",   model:"qwen/qwen-2.5-7b-instruct:free" },
+  { id:"or-mistral", label:"MISTRAL",    model:"mistralai/mistral-7b-instruct:free" },
 ];
 
-// Состояние
-let history = [];
-let providerIdx = 0;
-let busy = false;
+let chatHistory = [];
+let provIdx     = 0;
+let busy        = false;
 
-const badge      = document.getElementById("modelBadge");
-const statusEl   = document.getElementById("statusText");
-const sendBtn    = document.getElementById("sendBtn");
-const msgEl      = document.getElementById("messages");
-const emptyState = document.getElementById("emptyState");
-const inputEl    = document.getElementById("userInput");
-const toastEl    = document.getElementById("toast");
+const badgeEl  = document.getElementById("modelBadge");
+const statusEl = document.getElementById("statusText");
+const sendBtn  = document.getElementById("sendBtn");
+const msgEl    = document.getElementById("messages");
+const emptyEl  = document.getElementById("emptyState");
+const inputEl  = document.getElementById("userInput");
+const toastEl  = document.getElementById("toast");
 
-function setBadge() {
-  badge.textContent = (PROVIDERS[providerIdx]?.label || "—").toUpperCase();
-}
-setBadge();
+function setBadge(label) { badgeEl.textContent = label; }
 
 // Chips
 const CHIPS = [
-  { icon:"💻", title:"Напиши код",      sub:"Python / JS / HTML",    text:"Напиши пример кода на Python для парсинга веб-страницы с помощью BeautifulSoup." },
-  { icon:"💡", title:"Придумай идею",   sub:"Стартап / проект",       text:"Придумай 5 нестандартных идей для SaaS-стартапа в сфере ИИ." },
-  { icon:"🌐", title:"Переведи текст",  sub:"EN / RU / DE / FR",      text:"Переведи на английский: «Искусственный интеллект меняет мир быстрее, чем мы успеваем адаптироваться.»" },
-  { icon:"✍️", title:"Напиши пост",     sub:"LinkedIn / Telegram",    text:"Напиши убедительный пост для LinkedIn о важности непрерывного обучения в эпоху ИИ." },
-  { icon:"🔍", title:"Объясни просто",  sub:"Сложные темы — легко",   text:"Объясни простыми словами, как работает большая языковая модель (LLM)." },
-  { icon:"📊", title:"Анализ данных",   sub:"SQL / Excel / Python",   text:"Покажи пример SQL-запроса для подсчёта конверсии по источникам трафика за 30 дней." },
-  { icon:"🎨", title:"Prompt для ИИ",   sub:"Midjourney / DALL-E",    text:"Составь детальный prompt для Midjourney: футуристичный ночной город в стиле киберпанк." },
+  { icon:"💻", title:"Напиши код",       sub:"Python / JS / HTML",   text:"Напиши пример кода на Python для парсинга веб-страницы с помощью BeautifulSoup." },
+  { icon:"💡", title:"Придумай идею",    sub:"Стартап / проект",      text:"Придумай 5 нестандартных идей для SaaS-стартапа в сфере ИИ." },
+  { icon:"🌐", title:"Переведи текст",   sub:"EN / RU / DE / FR",     text:"Переведи на английский: «Искусственный интеллект меняет мир быстрее, чем мы успеваем адаптироваться.»" },
+  { icon:"✍️", title:"Напиши пост",      sub:"LinkedIn / Telegram",   text:"Напиши убедительный пост для LinkedIn о важности непрерывного обучения в эпоху ИИ." },
+  { icon:"🔍", title:"Объясни просто",   sub:"Сложные темы — легко",  text:"Объясни простыми словами, как работает большая языковая модель (LLM)." },
+  { icon:"📊", title:"Анализ данных",    sub:"SQL / Excel / Python",  text:"Покажи пример SQL-запроса для подсчёта конверсии по источникам трафика за 30 дней." },
+  { icon:"🎨", title:"Prompt для ИИ",    sub:"Midjourney / DALL-E",   text:"Составь детальный prompt для Midjourney: футуристичный ночной город в стиле киберпанк." },
   { icon:"🤖", title:"Системный промпт", sub:"ChatGPT / Claude",      text:"Напиши системный промпт для ИИ-ассистента, который помогает стартапам находить инвесторов." },
 ];
-
 const grid = document.getElementById("chipsGrid");
 CHIPS.forEach(c => {
   const el = document.createElement("div");
@@ -452,7 +355,6 @@ CHIPS.forEach(c => {
   grid.appendChild(el);
 });
 
-// UI helpers
 function autoResize(el) {
   el.style.height = "auto";
   el.style.height = Math.min(el.scrollHeight, 140) + "px";
@@ -461,23 +363,27 @@ function handleKey(e) {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 function scrollBottom() { msgEl.scrollTop = msgEl.scrollHeight; }
-function toast(msg, ms = 5000) {
+
+function showToast(msg) {
   toastEl.textContent = msg;
   toastEl.classList.add("show");
-  setTimeout(() => toastEl.classList.remove("show"), ms);
+  setTimeout(() => toastEl.classList.remove("show"), 6000);
 }
 
-function addMessage(role, text, animate) {
-  if (emptyState) emptyState.style.display = "none";
+function addMessage(role, text, typing) {
+  if (emptyEl) emptyEl.style.display = "none";
   const wrap   = document.createElement("div");
-  wrap.className = `msg ${role}`;
+  wrap.className = "msg " + role;
   const lbl    = document.createElement("div");
   lbl.className = "msg-label";
   lbl.textContent = role === "user" ? "ВЫ" : "AUVIX AI";
   const bubble = document.createElement("div");
   bubble.className = "msg-bubble";
-  if (animate) bubble.classList.add("typing-cursor");
-  else bubble.innerHTML = fmt(text);
+  if (typing) {
+    bubble.classList.add("typing-cursor");
+  } else {
+    bubble.innerHTML = fmt(text);
+  }
   wrap.append(lbl, bubble);
   msgEl.appendChild(wrap);
   scrollBottom();
@@ -488,7 +394,7 @@ function fmt(t) {
   return t
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
     .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
-    .replace(/`([^`]+)`/g,"<code style='font-family:var(--font-mono);font-size:12px;background:rgba(204,255,0,.1);padding:1px 6px;border-radius:3px;'>$1</code>")
+    .replace(/`([^`]+)`/g,"<code style='font-family:var(--font-mono);font-size:12px;background:rgba(204,255,0,.1);padding:1px 6px;border-radius:3px;color:var(--accent)'>$1</code>")
     .replace(/\n/g,"<br>");
 }
 
@@ -498,7 +404,7 @@ async function typeText(bubble, text) {
   await new Promise(r => {
     (function tick() {
       if (i < text.length) {
-        i = Math.min(i + 4, text.length);
+        i = Math.min(i + 5, text.length);
         bubble.textContent = text.slice(0, i);
         scrollBottom();
         requestAnimationFrame(tick);
@@ -512,72 +418,79 @@ async function typeText(bubble, text) {
   });
 }
 
-// API call — OpenRouter
-async function callProvider(provider, messages, signal) {
-  const res = await fetch(`${provider.baseUrl}/chat/completions`, {
+// API запрос к одному провайдеру
+async function callOne(provider, messages, signal) {
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     signal,
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${provider.apiKey}`,
-      "HTTP-Referer": "https://auvixda.github.io/Ai/",
-      "X-Title": "Auvix AI",
+      "Content-Type":  "application/json",
+      "Authorization": "Bearer " + OR_KEY,
+      "HTTP-Referer":  "https://auvixda.github.io/Ai/",
+      "X-Title":       "Auvix AI",
     },
     body: JSON.stringify({
-      model: provider.model,
+      model:       provider.model,
       messages,
-      max_tokens: 1024,
+      max_tokens:  1200,
       temperature: 0.7,
     }),
   });
 
+  const data = await res.json();
+
+  // Если OpenRouter вернул ошибку в теле
+  if (data.error) {
+    throw new Error(data.error.message || JSON.stringify(data.error));
+  }
   if (!res.ok) {
-    const txt = await res.text().catch(() => "");
-    throw new Error(`${res.status} — ${txt.slice(0, 150)}`);
+    throw new Error("HTTP " + res.status);
   }
 
-  const data = await res.json();
   const content = data?.choices?.[0]?.message?.content;
-  if (!content) throw new Error("Пустой ответ от провайдера");
+  if (!content) throw new Error("Пустой ответ");
   return content.trim();
 }
 
 // Fallback loop
 async function askAI(messages) {
   for (let i = 0; i < PROVIDERS.length; i++) {
-    const idx = (providerIdx + i) % PROVIDERS.length;
+    const idx = (provIdx + i) % PROVIDERS.length;
     const p   = PROVIDERS[idx];
-    statusEl.textContent = `Запрос к ${p.label}…`;
-    badge.textContent = p.label.toUpperCase();
+
+    statusEl.textContent = "Запрос к " + p.label + "…";
+    setBadge(p.label);
 
     const ctrl  = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 22000);
+    const timer = setTimeout(() => ctrl.abort(), 25000);
 
     try {
-      const result = await callProvider(p, messages, ctrl.signal);
+      const result = await callOne(p, messages, ctrl.signal);
       clearTimeout(timer);
-      providerIdx = idx;
-      setBadge();
+      provIdx = idx;
       return result;
-    } catch (e) {
+    } catch(e) {
       clearTimeout(timer);
-      console.warn(`[Auvix] ${p.id} ошибка:`, e.message);
+      console.warn("[Auvix]", p.id, "→", e.message);
     }
   }
-  throw new Error("Все провайдеры недоступны. Проверьте ключ или попробуйте позже.");
+  throw new Error("Все провайдеры недоступны. Обновите API-ключ на openrouter.ai");
 }
 
-// Send
 async function sendMessage() {
   const text = inputEl.value.trim();
   if (!text || busy) return;
+  if (OR_KEY === "ВСТАВЬТЕ_КЛЮЧ_СЮДА") {
+    showToast("⚠ Сначала вставьте API-ключ OpenRouter в код (переменная OR_KEY)");
+    return;
+  }
 
   busy = true;
-  sendBtn.disabled = true;
-  inputEl.disabled = true;
+  sendBtn.disabled  = true;
+  inputEl.disabled  = true;
 
   addMessage("user", text);
-  history.push({ role: "user", content: text });
+  chatHistory.push({ role:"user", content:text });
   inputEl.value = "";
   autoResize(inputEl);
 
@@ -586,16 +499,16 @@ async function sendMessage() {
 
   try {
     const reply = await askAI([
-      { role: "system", content: "Ты — Auvix AI, умный и полезный ассистент. Отвечай на языке пользователя. Будь точным и лаконичным." },
-      ...history,
+      { role:"system", content:"Ты — Auvix AI, умный и полезный ассистент. Отвечай на языке пользователя. Будь точным, структурированным и лаконичным." },
+      ...chatHistory,
     ]);
-    history.push({ role: "assistant", content: reply });
+    chatHistory.push({ role:"assistant", content:reply });
     await typeText(bubble, reply);
     statusEl.textContent = "Готов к работе";
-  } catch (e) {
+  } catch(e) {
     bubble.classList.remove("typing-cursor");
-    bubble.innerHTML = `<span style="color:#FF6B6B">⚠ ${e.message}</span>`;
-    toast("⚠ " + e.message);
+    bubble.innerHTML = '<span style="color:#FF6B6B">⚠ ' + e.message + '</span>';
+    showToast("⚠ " + e.message);
     statusEl.textContent = "Ошибка";
     console.error("[Auvix]", e);
   } finally {
