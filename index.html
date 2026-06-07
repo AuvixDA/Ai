@@ -373,13 +373,11 @@ const OR_KEY = localStorage.getItem('or_key') || '';
 
 // Провайдеры в порядке приоритета
 const PROVIDERS = [
-  // openrouter/free — автоматически выбирает лучшую свободную модель
-  { id:"or-auto",    label:"AUTO",       model:"openrouter/free" },
-  // Конкретные модели как резерв
-  { id:"or-llama",   label:"LLAMA 3.1",  model:"meta-llama/llama-3.1-8b-instruct:free" },
-  { id:"or-gemma",   label:"GEMMA 2",    model:"google/gemma-2-9b-it:free" },
-  { id:"or-qwen",    label:"QWEN 2.5",   model:"qwen/qwen-2.5-7b-instruct:free" },
-  { id:"or-mistral", label:"MISTRAL",    model:"mistralai/mistral-7b-instruct:free" },
+  { id:"or-owl",      label:"OWL ALPHA",   model:"openrouter/owl-alpha" },
+  { id:"or-gpt-oss",  label:"GPT OSS 120B", model:"openai/gpt-oss-120b:free" },
+  { id:"or-nemotron", label:"NEMOTRON",    model:"nvidia/nemotron-3-super-120b-a12b:free" },
+  { id:"or-laguna",   label:"LAGUNA M.1",  model:"poolside/laguna-m.1:free" },
+  { id:"or-auto",     label:"AUTO",        model:"openrouter/free" },
 ];
 
 let chatHistory = [];
@@ -502,14 +500,13 @@ async function callOne(provider, messages, signal) {
 
   // Если OpenRouter вернул ошибку в теле
   if (data.error) {
-    throw new Error(data.error.message || JSON.stringify(data.error));
+    throw new Error("API error: " + (data.error.message || JSON.stringify(data.error)));
   }
   if (!res.ok) {
-    throw new Error("HTTP " + res.status);
+    throw new Error("HTTP " + res.status + " | " + JSON.stringify(data).slice(0,300));
   }
-
   const content = data?.choices?.[0]?.message?.content;
-  if (!content) throw new Error("Пустой ответ");
+  if (!content) throw new Error("Empty: " + JSON.stringify(data).slice(0,300));
   return content.trim();
 }
 
